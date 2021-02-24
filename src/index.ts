@@ -2,6 +2,8 @@ import { ApolloServer, AuthenticationError, gql } from 'apollo-server';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import jwkToPem from 'jwk-to-pem';
+import path from 'path';
+
 import { ICognitoDecodedToken, ICognitoTokenPayload, IJwk } from './interfaces';
 const typeDefs = gql`
   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
@@ -49,7 +51,7 @@ const server = new ApolloServer({
             throw new AuthenticationError('Missing token')
         }
         const decodedToken = jwt.decode(token, { complete: true, json: true }) as ICognitoDecodedToken;
-        const jwksFile = fs.readFileSync('jwks.json');
+        const jwksFile = fs.readFileSync(path.join(__dirname, '..', 'jwks.json'));
         const jwks = JSON.parse(jwksFile.toString()) as IJwk[];
         const currentJwk = jwks.find((jwk) => jwk.kid === decodedToken?.header.kid) as jwkToPem.JWK;
 
