@@ -5,6 +5,7 @@ import jwkToPem from 'jwk-to-pem';
 import path from 'path';
 
 console.log(`test`);
+console.log(`test2`);
 import { ICognitoDecodedToken, ICognitoTokenPayload, IJwk } from './interfaces';
 const typeDefs = gql`
   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
