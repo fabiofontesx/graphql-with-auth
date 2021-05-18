@@ -4,6 +4,7 @@ import fs from 'fs';
 import jwkToPem from 'jwk-to-pem';
 import path from 'path';
 
+console.log(`test`);
 import { ICognitoDecodedToken, ICognitoTokenPayload, IJwk } from './interfaces';
 const typeDefs = gql`
   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
@@ -62,18 +63,18 @@ const server = new ApolloServer({
         const pem = jwkToPem(currentJwk);
         const claim = jwt.verify(token, pem, { algorithms: ['RS256'] }) as ICognitoTokenPayload;
         const currentSeconds = Math.floor(new Date().valueOf() / 1000);
-        if(currentSeconds > claim.exp || currentSeconds < claim.auth_time){
+        if (currentSeconds > claim.exp || currentSeconds < claim.auth_time) {
             throw new AuthenticationError('Token expirado')
         }
 
         const cognitoIssuer = `https://cognito-idp.us-east-1.amazonaws.com/us-east-1_7NYk2C8JP`;
-        if(claim.iss !== cognitoIssuer){
+        if (claim.iss !== cognitoIssuer) {
             throw new AuthenticationError('Issuer invalido')
         }
 
-        if(claim.token_use !== 'access'){ 
+        if (claim.token_use !== 'access') {
             throw new AuthenticationError('Uso do token invalido')
-        } 
+        }
     }
 })
 
